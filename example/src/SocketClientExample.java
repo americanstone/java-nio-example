@@ -8,8 +8,8 @@ public class SocketClientExample {
     public void startClient() throws IOException, InterruptedException {
         InetSocketAddress hostAddress = new InetSocketAddress( 8090);
         SocketChannel client = SocketChannel.open(hostAddress);
- 
-        System.out.println("Client... started");
+
+        System.out.println("Client started! connect to server 8090...");
         
         String threadName = Thread.currentThread().getName();
  
