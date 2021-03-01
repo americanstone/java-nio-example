@@ -1,5 +1,8 @@
 # java-nio-example
 
+## read the stock programming first
+
+https://www.cs.bgu.ac.il/~spl201/index.php?page=Reactor
 
 ![socketchannel.jpg.webp](example/doc/socketchannel.jpg)
 
