@@ -1,5 +1,7 @@
 package client;
 
+import java.io.Serializable;
+
 public class NewsFeedClientMain {
 
     public static void main(String[] args) throws Exception {
@@ -35,7 +37,6 @@ public class NewsFeedClientMain {
             c.receive(); //ok
 
         }
-
     }
 
     private static void runSecondClient(String host) throws Exception {

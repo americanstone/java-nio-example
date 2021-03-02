@@ -1,6 +1,5 @@
 package protocol;
 
-import protocol.MessagingProtocol;
 
 import java.time.LocalDateTime;
 

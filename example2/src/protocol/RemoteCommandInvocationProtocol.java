@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class RemoteCommandInvocationProtocol<T> implements MessagingProtocol<Serializable> {
 
-    private T data;
+    private final T data;
 
     public RemoteCommandInvocationProtocol(T data) {
         this.data = data;

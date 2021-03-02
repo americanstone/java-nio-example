@@ -10,7 +10,7 @@ public class NewsFeedServerMain {
         new ThreadPerClientServer(
                 7777, //port
                 () -> new RemoteCommandInvocationProtocol<>(feed), //protocol factory
-                () -> new ObjectEncoderDecoder<>()                 //message encoder decoder factory
+                ObjectEncoderDecoder::new                 //message encoder decoder factory
         ).serve();
     }
 }
