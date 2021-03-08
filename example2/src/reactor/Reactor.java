@@ -65,7 +65,7 @@ public class Reactor<T> implements Closeable {
             // by asking selector which channels have event and dispatch them
             while (!selectorThread.isInterrupted()) {
                 //Selects a set of keys whose corresponding channels are ready for I/O operations.
-                //This method performs a blocking selection operation.
+                //This method performs a blocking selection operation. put in sleep if no event and give up on cpu
                 int numberOfKeys = selector.select();
 
                 // this is necessary to prevent the same key from coming up again the next time around.
