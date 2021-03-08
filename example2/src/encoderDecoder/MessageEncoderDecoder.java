@@ -1,5 +1,11 @@
-package protocol;
+package encoderDecoder;
 
+/*
+The MessageEncoderDecoder interface is a filter that we put between the Socket input stream and the protocol.
+ The protocol does not access the input/output stream directly - it only handle application level messages while
+ the MessageEncoderDecoder responsible to translate them to and from bytes.
+ This way, one can use the same protocol under different message formats and reuse message formats for different protocols.
+ */
 public interface MessageEncoderDecoder<T> {
 
     /**

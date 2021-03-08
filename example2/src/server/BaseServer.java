@@ -1,6 +1,7 @@
 package server;
 
-import protocol.MessageEncoderDecoder;
+import encoderDecoder.MessageEncoderDecoder;
+import handler.ConnectionHandler;
 import protocol.MessagingProtocol;
 
 import java.io.IOException;
@@ -26,9 +27,7 @@ public abstract class BaseServer {
 
     public void serve() {
         try (ServerSocket serverSock = new ServerSocket(port)) {
-
             while (!Thread.currentThread().isInterrupted()) {
-
                 Socket clientSock = serverSock.accept();
                 ConnectionHandler handler = new ConnectionHandler(
                         clientSock,
@@ -43,7 +42,6 @@ public abstract class BaseServer {
 
         System.out.println("server closed!!!");
     }
-
 
     protected abstract void execute(ConnectionHandler handler);
 }

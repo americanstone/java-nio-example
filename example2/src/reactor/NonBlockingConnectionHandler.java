@@ -1,6 +1,6 @@
 package reactor;
 
-import protocol.MessageEncoderDecoder;
+import encoderDecoder.MessageEncoderDecoder;
 import protocol.MessagingProtocol;
 
 import java.io.IOException;
@@ -10,15 +10,31 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
+/*
+    The first thing that we should notice in the NonBlockingConnectionHandler class is the BUFFER_POOL variable.
+     When reading data from nio-channels it is recommended (for performance reasons) to use direct byte buffers
+     (which reside outside of the garbage collector region and therefore one can simply pass pointer to them to
+     the operation system to fill on read request). @NonBlockingConnectionHandler@s uses many of such buffers for
+     a short period of time, since the creation/eviction cycle of a direct bytebuffer of the needed size is relatively
+     costly operation, the BUFFER_POOL will cache the already created buffers for reuse.
+     This concept follows the Flyweight design-pattern.
+ */
 public class NonBlockingConnectionHandler<T> {
     private static final int BUFFER_ALLOCATION_SIZE = 1 << 13; //8k
+    // flyweight pattern pool of re-usable buffer for channel to use
+    //uses many of such buffers for a short period of time, since the creation/eviction cycle of a direct bytebuffer of the needed size is relatively costly operation,the
+    //BUFFER_POOL will cache the already created buffers for reuse
     private static final ConcurrentLinkedQueue<ByteBuffer> BUFFER_POOL = new ConcurrentLinkedQueue<>();
 
     private final MessagingProtocol<T> protocol;
     private final MessageEncoderDecoder<T> encdec;
+    // ready read event trigger, server read data from client stock and write this queue
+    // ready write event trigger, server poll the buffer from queue write to client socket
+    // active object pattern
     private final Queue<ByteBuffer> writeQueue = new ConcurrentLinkedQueue<>();
-    private final SocketChannel chan;
+
+    private final SocketChannel chan; // the socket wrapper
+
     private final Reactor reactor;
 
     public NonBlockingConnectionHandler(
@@ -31,6 +47,8 @@ public class NonBlockingConnectionHandler<T> {
         this.protocol = protocol;
         this.reactor = reactor;
     }
+
+    // read the data from client stocket
     public Runnable continueRead() {
         ByteBuffer buf = leaseBuffer();
 
@@ -42,7 +60,7 @@ public class NonBlockingConnectionHandler<T> {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        if (success) {
+        if (success) { // read data from client stock success, put data in
             buf.flip();
             return () -> {
                 try {
@@ -66,6 +84,7 @@ public class NonBlockingConnectionHandler<T> {
             return null;
         }
     }
+
     public void close() {
         try {
             chan.close();
@@ -73,10 +92,12 @@ public class NonBlockingConnectionHandler<T> {
             ex.printStackTrace();
         }
     }
+
+    // write data to client stocket
     public void continueWrite() {
         while (!writeQueue.isEmpty()) {
             try {
-                ByteBuffer top = writeQueue.peek();
+                ByteBuffer top = writeQueue.peek(); //Retrieves, but does not remove
                 chan.write(top);
                 if (top.hasRemaining()) {
                     return;
@@ -88,9 +109,11 @@ public class NonBlockingConnectionHandler<T> {
                 close();
             }
         }
-        if (writeQueue.isEmpty()) {
-            if (protocol.shouldTerminate()) close();
-            else reactor.updateInterestedOps(chan, SelectionKey.OP_READ);
+
+        if (protocol.shouldTerminate()) {
+            close();
+        } else {
+            reactor.updateInterestedOps(chan, SelectionKey.OP_READ);
         }
     }
     private static ByteBuffer leaseBuffer() {
@@ -102,5 +125,5 @@ public class NonBlockingConnectionHandler<T> {
         return buff;
     }
     private static void releaseBuffer(ByteBuffer buff) {
-        BUFFER_POOL.add(buff);
+        BUFFER_POOL.add(buff.clear());
     }}

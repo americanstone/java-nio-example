@@ -1,6 +1,7 @@
 package client;
 
-import protocol.ObjectEncoderDecoder;
+import clientServerSharedModel.Command;
+import encoderDecoder.ObjectEncoderDecoder;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

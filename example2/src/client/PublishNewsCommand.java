@@ -1,6 +1,7 @@
 package client;
 
-import server.NewsFeed;
+import clientServerSharedModel.Command;
+import clientServerSharedModel.NewsFeed;
 
 import java.io.Serializable;
 

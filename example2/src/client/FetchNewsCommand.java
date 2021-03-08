@@ -1,9 +1,12 @@
 package client;
 
-import server.NewsFeed;
+import clientServerSharedModel.Command;
+import clientServerSharedModel.NewsFeed;
 
 import java.io.Serializable;
-
+/*
+    object will be passed to server side to execute the NewsFeed
+ */
 public class FetchNewsCommand implements Command<NewsFeed> {
 
     private String category;

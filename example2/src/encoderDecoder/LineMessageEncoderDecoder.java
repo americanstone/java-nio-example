@@ -1,4 +1,4 @@
-package protocol;
+package encoderDecoder;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;

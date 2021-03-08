@@ -1,4 +1,6 @@
-package protocol;
+package encoderDecoder;
+
+import encoderDecoder.MessageEncoderDecoder;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

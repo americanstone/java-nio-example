@@ -1,9 +1,12 @@
 package protocol;
 
-import client.Command;
+import clientServerSharedModel.Command;
 
 import java.io.Serializable;
 
+/*
+    server side hold the data, client command can execute on
+ */
 public class RemoteCommandInvocationProtocol<T> implements MessagingProtocol<Serializable> {
 
     private final T data;
@@ -12,6 +15,9 @@ public class RemoteCommandInvocationProtocol<T> implements MessagingProtocol<Ser
         this.data = data;
     }
 
+    /*
+        hwo to manipulate the data up to the commands client passed in
+     */
     @Override
     public Serializable process(Serializable msg) {
         return ((Command) msg).execute(data);
@@ -21,5 +27,4 @@ public class RemoteCommandInvocationProtocol<T> implements MessagingProtocol<Ser
     public boolean shouldTerminate() {
         return false;
     }
-
 }

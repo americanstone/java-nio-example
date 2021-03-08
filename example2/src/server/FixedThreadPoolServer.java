@@ -1,6 +1,7 @@
 package server;
 
-import protocol.MessageEncoderDecoder;
+import encoderDecoder.MessageEncoderDecoder;
+import handler.ConnectionHandler;
 import protocol.MessagingProtocol;
 
 import java.util.concurrent.ExecutorService;
