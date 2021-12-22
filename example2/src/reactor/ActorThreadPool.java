@@ -21,7 +21,8 @@ public class ActorThreadPool<T> {
     private final Map<T, Queue<Runnable>> acts;
     //Like most collection classes, this class is not synchronized. And therefore we will guard access to it using the read-write lock: actsRWLock
     private final ReadWriteLock actsRWLock;
-    //Internally, it uses a simple fixed executor service but in order to not add two task of the same act to the pool it maintain the playingNow set.
+    //Internally, it uses a simple fixed executor service but in order to not add two task of the same act to the pool
+    // it maintain the playingNow set.
     private final Set<T> playingNow;
 
     private final ExecutorService threads;

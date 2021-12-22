@@ -57,7 +57,7 @@ https://examples.javacodegeeks.com/core-java/nio/java-nio-socket-example/
 There are two important participants in the architecture of Reactor
 Pattern.
 
-1. Reactor
+1. Reactor/dispatcher
 
 A Reactor runs in a separate thread and its job is to react to IO events
 by dispatching the work to the appropriate handler. Its like a telephone
