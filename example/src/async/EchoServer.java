@@ -22,20 +22,18 @@ public class EchoServer {
         AsynchronousServerSocketChannel serverSock =  AsynchronousServerSocketChannel.open().bind(sockAddr);
 
         //start to accept the connection from client
-        serverSock.accept(serverSock, new CompletionHandler<AsynchronousSocketChannel,AsynchronousServerSocketChannel >() {
-
+        serverSock.accept(serverSock,
+         new CompletionHandler<>() {
             @Override
-            public void completed(AsynchronousSocketChannel sockChannel, AsynchronousServerSocketChannel serverSock ) {
+            public void completed(AsynchronousSocketChannel sockChannel, AsynchronousServerSocketChannel serverSock) {
                 //a connection is accepted, start to accept next connection
-                serverSock.accept( serverSock, this );
+                serverSock.accept(serverSock, this);
                 //start to read message from the client
-                startRead( sockChannel );
-
+                startRead(sockChannel);
             }
-
             @Override
             public void failed(Throwable exc, AsynchronousServerSocketChannel serverSock) {
-                System.out.println( "fail to accept a connection");
+                System.out.println("fail to accept a connection");
             }
 
         } );
